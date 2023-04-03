@@ -120,7 +120,7 @@ bool project_writepro(Project *project)
     cfile_write(outfile, "TEMPLATE = app\n");
     cfile_writefmt(outfile, "TARGET = %s\n", c_str(project->name));
     cfile_write(outfile, "CONFIG = c99 link_pkgconfig\n");
-    cfile_write(outfile, "DEFINES =\n");
+    cfile_write(outfile, "DEFINES = _GNU_SOURCE\n");
     cfile_write(outfile, "INCLUDEPATH =\n");
     cfile_write(outfile, "PKGCONFIG =\n");
     cfile_write(outfile, "\n");
@@ -192,6 +192,7 @@ bool project_writemeson(Project *project)
     cfile_write(outfile, "    '-Wall',\n");
     cfile_write(outfile, "    '-Wextra',\n");
     cfile_write(outfile, "    '-O2',\n");
+    cfile_write(outfile, "    '-D_GNU_SOURCE',\n");
     cfile_write(outfile, "]\n");
     cfile_write(outfile, "\n");
     cfile_write(outfile, "app_deps = [\n");

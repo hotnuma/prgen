@@ -1,12 +1,17 @@
 #include "project.h"
 
-#include <print.h>
 #include <unistd.h>
+#include <string.h>
+#include <print.h>
 
 static int _app_exit(bool usage, int ret)
 {
     if (usage)
-        print("*** usage : prgen -d /path/to/project -n projectname");
+    {
+        print("*** usage :");
+        print("\tprgen -d /path/to/project projectname");
+        print("\tprgen projectname");
+    }
 
     return ret;
 }
@@ -15,7 +20,7 @@ int main(int argc, char **argv)
 {
     ProjectAuto *project = project_new();
 
-    c_autofree char *dirpath = NULL;
+    CStringAuto *dirpath = cstr_new_size(64);
     const char *name = NULL;
 
     int n = 1;
@@ -29,7 +34,7 @@ int main(int argc, char **argv)
             if (++n >= argc)
                 return EXIT_FAILURE;
 
-            dirpath = argv[n];
+            cstr_copy(dirpath, argv[n]);
         }
         else
         {
@@ -39,11 +44,13 @@ int main(int argc, char **argv)
         n++;
     }
 
-    if (!dirpath)
+    if (cstr_isempty(dirpath))
     {
-        dirpath = getcwd(NULL, 0);
+        char *pwd = getcwd(NULL, 0);
+        cstr_copy(dirpath, pwd);
+        free(pwd);
 
-        if (!dirpath)
+        if (cstr_isempty(dirpath))
         {
             print("*** unable to read current directory, abort...");
             return EXIT_FAILURE;
@@ -53,7 +60,7 @@ int main(int argc, char **argv)
     if (!name)
         return _app_exit(true, EXIT_FAILURE);
 
-    if (!project_parse(project, dirpath, name))
+    if (!project_parse(project, c_str(dirpath), name))
         return EXIT_FAILURE;
 
     return EXIT_SUCCESS;
