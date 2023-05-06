@@ -204,7 +204,7 @@ bool project_writemeson(Project *project)
 
     int size = clist_size(project->list);
 
-    cfile_write(outfile, "app_src = [\n");
+    cfile_write(outfile, "app_sources = [\n");
     for (int i = 0; i < size; ++i)
     {
         ProjectFile *prfile = (ProjectFile*) clist_at(project->list, i);
@@ -222,7 +222,7 @@ bool project_writemeson(Project *project)
     cfile_write(outfile, "    meson.project_name(),\n");
     cfile_write(outfile, "    c_args : c_args,\n");
     cfile_write(outfile, "    dependencies : app_deps,\n");
-    cfile_write(outfile, "    sources : app_src,\n");
+    cfile_write(outfile, "    sources : app_sources,\n");
     cfile_write(outfile, "    install : false,\n");
     cfile_write(outfile, ")\n");
     cfile_write(outfile, "\n");
