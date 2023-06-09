@@ -45,6 +45,8 @@ bool wp_readdir(WordParser *parser, const char *indir)
             return false;
     }
 
+    wp_sort(parser);
+
     return true;
 }
 
