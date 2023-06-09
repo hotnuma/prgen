@@ -1,7 +1,7 @@
 #ifndef PROJECT_H
 #define PROJECT_H
 
-#include "wrparser.h"
+#include "wparser.h"
 
 #include <clist.h>
 

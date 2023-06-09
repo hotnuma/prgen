@@ -10,14 +10,14 @@ PKGCONFIG += tinyc
 HEADERS = \
     prfile.h \
     project.h \
-    wrparser.h \
+    wparser.h
 
 SOURCES = \
     0Temp.c \
     main.c \
     prfile.c \
     project.c \
-    wrparser.c \
+    wparser.c
 
 DISTFILES = \
     install.sh \

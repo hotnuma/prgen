@@ -9,17 +9,15 @@
 #include <print.h>
 #include <sys/stat.h>
 
-static bool _test_word(const char *word)
-{
-    return (str_startswith(word, "HAVE_", true));
-}
+//static bool _test_word(const char *word)
+//{
+//    return (str_startswith(word, "HAVE_", true));
+//}
 
 static int _compare(void *entry1, void *entry2)
 {
     ProjectFile *e1 = *((ProjectFile**) entry1);
     ProjectFile *e2 = *((ProjectFile**) entry2);
-
-    //return strcmp(c_str(e1->filepath), c_str(e2->filepath));
 
     return path_cmp(c_str(e1->filepath), c_str(e2->filepath));
 }
@@ -31,7 +29,7 @@ Project* project_new()
     project->dirpath = cstr_new_size(64);
     project->name = cstr_new_size(16);
     project->list = clist_new(128, (CDeleteFunc) prfile_free);
-    project->parser = wp_new(_test_word);
+    project->parser = wp_new(word_test);
 
     return project;
 }
@@ -66,7 +64,7 @@ bool project_parse(Project *project, const char *dirpath, const char *name)
     CStringAuto *filepath = cstr_new_size(64);
     CStringAuto *fullpath = cstr_new_size(64);
 
-    while (cdirparser_read(dir, filepath))
+    while (cdirparser_read(dir, filepath, NULL))
     {
         const char *pathstr = c_str(filepath);
 
@@ -181,11 +179,9 @@ bool project_writemeson(Project *project)
     cfile_write(outfile, "project(\n");
     cfile_writefmt(outfile, "    '%s',\n", c_str(project->name));
     cfile_write(outfile, "    ['c'],\n");
-    cfile_write(outfile, "    version : '1.0',\n");
-    cfile_write(outfile, "    license : 'GPL-2.0',\n");
-    cfile_write(outfile, "    default_options : [\n");
-    cfile_write(outfile, "        'c_std=c99',\n");
-    cfile_write(outfile, "    ],\n");
+    cfile_write(outfile, "    default_options: ['c_std=c99'],\n");
+    cfile_write(outfile, "    license: 'GPL-2.0',\n");
+    cfile_write(outfile, "    version: '1.0',\n");
     cfile_write(outfile, ")\n");
     cfile_write(outfile, "\n");
     cfile_write(outfile, "c_args = [\n");
@@ -220,10 +216,10 @@ bool project_writemeson(Project *project)
 
     cfile_write(outfile, "executable(\n");
     cfile_write(outfile, "    meson.project_name(),\n");
-    cfile_write(outfile, "    c_args : c_args,\n");
-    cfile_write(outfile, "    dependencies : app_deps,\n");
-    cfile_write(outfile, "    sources : app_sources,\n");
-    cfile_write(outfile, "    install : false,\n");
+    cfile_write(outfile, "    c_args: c_args,\n");
+    cfile_write(outfile, "    dependencies: app_deps,\n");
+    cfile_write(outfile, "    sources: app_sources,\n");
+    cfile_write(outfile, "    install: false,\n");
     cfile_write(outfile, ")\n");
     cfile_write(outfile, "\n");
     cfile_write(outfile, "\n");
