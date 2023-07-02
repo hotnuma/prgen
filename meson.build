@@ -18,6 +18,7 @@ app_deps = [
 
 app_src = [
     'main.c',
+    'pathcmp.c',
     'prfile.c',
     'project.c',
     'wparser.c',

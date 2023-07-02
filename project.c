@@ -1,6 +1,7 @@
 #include "project.h"
 
 #include "prfile.h"
+#include "pathcmp.h"
 #include <cdirparser.h>
 #include <cfile.h>
 #include <libapp.h>

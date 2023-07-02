@@ -8,6 +8,7 @@ PKGCONFIG =
 PKGCONFIG += tinyc
 
 HEADERS = \
+    pathcmp.h \
     prfile.h \
     project.h \
     wparser.h
@@ -15,6 +16,7 @@ HEADERS = \
 SOURCES = \
     0Temp.c \
     main.c \
+    pathcmp.c \
     prfile.c \
     project.c \
     wparser.c
