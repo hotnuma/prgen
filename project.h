@@ -10,6 +10,8 @@ typedef struct
     CString *dirpath;
     CString *name;
     CList *list;
+    bool write_meson;
+    bool write_install;
     WordParser *parser;
 
 } Project;

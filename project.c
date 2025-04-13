@@ -27,8 +27,10 @@ Project* project_new()
 {
     Project *project = malloc(sizeof(Project));
 
-    project->dirpath = cstr_new_size(64);
     project->name = cstr_new_size(16);
+    project->dirpath = cstr_new_size(64);
+    project->write_meson = false;
+    project->write_install = false;
     project->list = clist_new(128, (CDeleteFunc) prfile_free);
     project->parser = wp_new(word_test);
 
@@ -100,8 +102,10 @@ bool project_parse(Project *project, const char *dirpath, const char *name)
     }
 
     project_writepro(project);
-    project_writemeson(project);
-    project_writeinstall(project);
+    if (project->write_meson)
+        project_writemeson(project);
+    if (project->write_install)
+        project_writeinstall(project);
 
     return true;
 }

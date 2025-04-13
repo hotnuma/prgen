@@ -2,18 +2,32 @@
 
 #include <unistd.h>
 #include <string.h>
-#include <print.h>
+//#include <print.h>
+#include <stdio.h>
 
-static int _app_exit(bool usage, int ret)
+#define APPNAME "prgen"
+
+static void error_exit(const char *msg)
 {
-    if (usage)
+    if (!msg || *msg == '\0')
     {
-        print("*** usage :");
-        print("\tprgen -d /path/to/project projectname");
-        print("\tprgen projectname");
+        msg = "an error occurred";
     }
 
-    return ret;
+    printf("*** %s\nabort...\n", msg);
+
+    exit(EXIT_FAILURE);
+}
+
+static void usage_exit()
+{
+    printf("*** usage :");
+    printf("%s -d /path/to/project <projectname>", APPNAME);
+    printf("%s -m -s -d /path/to/project <projectname>", APPNAME);
+    printf("%s <projectname>", APPNAME);
+    printf("abort...\n");
+
+    exit(EXIT_FAILURE);
 }
 
 int main(int argc, char **argv)
@@ -37,6 +51,14 @@ int main(int argc, char **argv)
 
             cstr_copy(dirpath, argv[n]);
         }
+        else if (strcmp(part, "-m") == 0)
+        {
+            project->write_meson = true;
+        }
+        else if (strcmp(part, "-s") == 0)
+        {
+            project->write_install = true;
+        }
         else if (strcmp(part, "-c") == 0)
         {
             config = true;
@@ -57,10 +79,7 @@ int main(int argc, char **argv)
         free(pwd);
 
         if (cstr_isempty(dirpath))
-        {
-            print("*** unable to read current directory, abort...");
-            return EXIT_FAILURE;
-        }
+            error_exit("unable to read current directory");
     }
 
     // generate config.h.in
@@ -69,26 +88,26 @@ int main(int argc, char **argv)
         WordParser *parser = project->parser;
 
         if (!wp_readdir(parser, c_str(dirpath)))
-            _app_exit(false, EXIT_FAILURE);
+            usage_exit();
 
         int size = cstrlist_size(parser->list);
 
         if (size < 1)
             return EXIT_SUCCESS;
 
-        print("/* config.h.in.  Generated from sources by prgen.  */\n");
+        printf("/* config.h.in.  Generated from sources by prgen.  */\n\n");
 
         for (int i = 0; i < size; ++i)
         {
             CString *item = cstrlist_at(parser->list, i);
-            print("#mesondefine %s\n", c_str(item));
+            printf("#mesondefine %s\n\n", c_str(item));
         }
 
         return EXIT_SUCCESS;
     }
 
     if (!name)
-        return _app_exit(true, EXIT_FAILURE);
+        usage_exit();
 
     if (!project_parse(project, c_str(dirpath), name))
         return EXIT_FAILURE;
