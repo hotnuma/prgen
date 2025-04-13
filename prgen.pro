@@ -1,7 +1,7 @@
 TEMPLATE = app
 TARGET = prgen
 CONFIG = c99 link_pkgconfig
-DEFINES =
+DEFINES = _GNU_SOURCE bool=BOOL true=TRUE false=FALSE
 INCLUDEPATH =
 PKGCONFIG =
 

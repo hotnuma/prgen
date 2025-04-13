@@ -10,6 +10,7 @@ c_args = [
     '-Wall',
     '-Wextra',
     '-O2',
+    '-D_GNU_SOURCE',
 ]
 
 app_deps = [
