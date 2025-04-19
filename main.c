@@ -2,7 +2,6 @@
 
 #include <unistd.h>
 #include <string.h>
-//#include <print.h>
 #include <stdio.h>
 
 #define APPNAME "prgen"
@@ -22,8 +21,7 @@ static void error_exit(const char *msg)
 static void usage_exit()
 {
     printf("*** usage :");
-    printf("%s -d /path/to/project <projectname>", APPNAME);
-    printf("%s -m -s -d /path/to/project <projectname>", APPNAME);
+    printf("%s -m -s <projectname>", APPNAME);
     printf("%s <projectname>", APPNAME);
     printf("abort...\n");
 
@@ -44,14 +42,7 @@ int main(int argc, char **argv)
     {
         const char *part = argv[n];
 
-        if (strcmp(part, "-d") == 0)
-        {
-            if (++n >= argc)
-                return EXIT_FAILURE;
-
-            cstr_copy(dirpath, argv[n]);
-        }
-        else if (strcmp(part, "-m") == 0)
+        if (strcmp(part, "-m") == 0)
         {
             project->write_meson = true;
         }
@@ -72,15 +63,12 @@ int main(int argc, char **argv)
     }
 
     // project directory
-    if (cstr_isempty(dirpath))
-    {
-        char *pwd = getcwd(NULL, 0);
-        cstr_copy(dirpath, pwd);
-        free(pwd);
+    char *pwd = getcwd(NULL, 0);
+    cstr_copy(dirpath, pwd);
+    free(pwd);
 
-        if (cstr_isempty(dirpath))
-            error_exit("unable to read current directory");
-    }
+    if (cstr_isempty(dirpath))
+        error_exit("unable to read current directory");
 
     // generate config.h.in
     if (config)
