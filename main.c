@@ -20,9 +20,9 @@ static void error_exit(const char *msg)
 
 static void usage_exit()
 {
-    printf("*** usage :");
-    printf("%s -m -s <projectname>", APPNAME);
-    printf("%s <projectname>", APPNAME);
+    printf("*** usage :\n");
+    printf("%s -m -s <projectname>\n", APPNAME);
+    printf("%s <projectname>\n", APPNAME);
     printf("abort...\n");
 
     exit(EXIT_FAILURE);
